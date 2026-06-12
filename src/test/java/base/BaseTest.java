@@ -1,24 +1,29 @@
 package base;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.*;
 
-public class BasePage {
+import static utils.BrowserFactory.launchBrowser;
 
-    public WebDriver driver;
+public class BaseTest {
 
+    protected WebDriver driver;
+
+    @Parameters("browser")
     @BeforeMethod
-    public void setUp() {
-        driver = new ChromeDriver();
+    public void setup(String browser) {
+
+        driver = launchBrowser(browser);
+
         driver.manage().window().maximize();
-        driver.get("https://www.booking.com/flights/index.en-gb.html");
+
+        driver.get("https://www.agoda.com");
     }
 
     @AfterMethod
     public void tearDown() {
-        if (driver != null) {
+
+        if(driver != null) {
             driver.quit();
         }
     }

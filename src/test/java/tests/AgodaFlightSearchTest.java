@@ -1,43 +1,53 @@
 package tests;
 
-import base.BasePage;
+
+import base.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.AgodaFlightPage;
 
-public class FlightSearchTest extends BasePage {
+public class AgodaFlightSearchTest extends BaseTest {
 
     @Test
-    public void searchFlights_Today() {
+    public void verifyFlightSearch() {
 
-        AgodaFlightPage page = new AgodaFlightPage(driver);
+        AgodaFlightPage flightPage =
+                new AgodaFlightPage(driver);
 
-        page.enterFromCity("Delhi");
-        page.enterToCity("Mumbai");
+        flightPage.openFlightsTab();
 
-        page.openCalendar();
-        page.selectDate("today"); // assumption
+        flightPage.selectOrigin();
 
-        page.clickSearch();
+        flightPage.selectDestination();
 
-        Assert.assertTrue(page.isResultsDisplayed(),
-                "Flights should be displayed for today");
+        flightPage.selectTomorrowDate();
+
+        flightPage.addAdultPassenger();
+
+        Assert.assertEquals(
+                flightPage.getPassengerText(),
+                "2 Passengers, Economy");
+
+        flightPage.clickDone();
+
+        flightPage.searchFlights();
+
+        Assert.assertEquals(
+                flightPage.getSearchResultTitle(),
+                "Flights from Mumbai to New Delhi");
+
+        System.out.println("Flight Search Test Passed");
     }
 
     @Test
-    public void searchFlights_Tomorrow() {
+    public void verifyBlankField(){
+        AgodaFlightPage flightPage =
+                new AgodaFlightPage(driver);
+        flightPage.openFlightsTab();
+        flightPage.searchFlights();
+        String actualMessage = flightPage.getFlightErrorModalMessage();
+        String expectedMessage = "Please enter the origin, destination and your travel date to proceed.";
+        Assert.assertEquals(actualMessage, expectedMessage);
 
-        AgodaFlightPage page = new AgodaFlightPage(driver);
-
-        page.enterFromCity("Delhi");
-        page.enterToCity("Mumbai");
-
-        page.openCalendar();
-        page.selectDate("tomorrow"); // assumption
-
-        page.clickSearch();
-
-        Assert.assertTrue(page.isResultsDisplayed(),
-                "Flights should be displayed for tomorrow");
     }
 }

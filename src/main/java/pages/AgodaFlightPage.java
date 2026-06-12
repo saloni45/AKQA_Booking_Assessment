@@ -92,10 +92,23 @@ public class AgodaFlightPage {
     }
 
     public String getSearchResultTitle() {
+        // Wait until the real title text appears (not the loading placeholder)
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.xpath("//h2[@data-testid='title']"),
+                "Flights from"
+        ));
 
-        return wait.until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                By.xpath("//h2[@data-testid='title']")))
-                .getText();
+        // Now safely return the final title text
+        return driver.findElement(By.xpath("//h2[@data-testid='title']")).getText();
     }
+    public String getFlightErrorModalMessage() {
+        // Wait for the modal to appear
+        WebElement modalMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@data-component='flight-error-modal']//div[@data-element-name='search-box-modal-message']")
+        ));
+
+        // Return the message text
+        return modalMessage.getText();
+    }
+
 }
