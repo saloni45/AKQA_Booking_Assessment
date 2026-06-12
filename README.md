@@ -143,6 +143,3 @@ mvn clean test
 
 ## Author
 Saloni Khandelwal
-
-Saloni Khandelwal
-Senior QA Automation Engineer
